@@ -1,10 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\TopicController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\TopicController;
-use App\Http\Controllers\CommentController;
 
 // Auth
 Route::post('/login', [AuthController::class, 'login'])->name('login');

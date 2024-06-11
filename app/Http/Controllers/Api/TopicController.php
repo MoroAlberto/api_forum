@@ -1,43 +1,42 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Models\Comment;
+use App\Http\Controllers\Controller;
 use App\Models\Topic;
 use Illuminate\Http\Request;
 
-class CommentController extends Controller
+class TopicController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return Comment::with('user', 'topic')->get();
+        return Topic::with('user', 'comments')->get();
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, string $topicId)
+    public function store(Request $request)
     {
         $request->validate([
+            'title' => 'required|string|max:255',
             'body' => 'required|string',
         ]);
-
-        $topic = Topic::findOrFail($topicId);
 
         if (!auth()->check()) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        $comment = new Comment();
-        $comment->user_id = $request->user()->id;
-        $comment->topic_id = $topic->id;
-        $comment->body = $request->body;
-        $comment->save();
+        $topic = new Topic();
+        $topic->user_id = $request->user()->id;
+        $topic->title = $request->title;
+        $topic->body = $request->body;
+        $topic->save();
 
-        return response()->json($comment, 201);
+        return response()->json($topic, 201);
     }
 
     /**
@@ -45,7 +44,7 @@ class CommentController extends Controller
      */
     public function show(string $id)
     {
-        return Comment::with('user', 'topic')->findOrFail($id);
+        return Topic::with('user', 'comments')->findOrFail($id);
     }
 
     /**
@@ -54,20 +53,23 @@ class CommentController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
+            'title' => 'required|string|max:255',
             'body' => 'required|string',
         ]);
 
-        $comment = Comment::findOrFail($id);
+        $topic = Topic::findOrFail($id);
 
         if (!auth()->check()) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        $comment->update([
+        $topic->update([
+            'title' => $request->title,
             'body' => $request->body,
         ]);
 
-        return response()->json(['message' => 'Comment updated successfully', 'comment' => $comment]);
+        return response()->json(['message' => 'Topic updated successfully', 'topic' => $topic]);
+
     }
 
     /**
@@ -75,14 +77,14 @@ class CommentController extends Controller
      */
     public function destroy(string $id)
     {
-        $comment = Comment::findOrFail($id);
+        $topic = Topic::findOrFail($id);
 
         if (!auth()->check()) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        $comment->delete();
+        $topic->delete();
 
-        return response()->json(['message' => 'Comment deleted successfully']);
+        return response()->json(['message' => 'Topic deleted successfully']);
     }
 }
