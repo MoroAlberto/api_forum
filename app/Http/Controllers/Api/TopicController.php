@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TopicRequest;
 use App\Models\Topic;
 use Illuminate\Http\Request;
 
@@ -19,17 +20,8 @@ class TopicController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(TopicRequest $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'body' => 'required|string',
-        ]);
-
-        if (!auth()->check()) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
-
         $topic = new Topic();
         $topic->user_id = $request->user()->id;
         $topic->title = $request->title;
@@ -50,18 +42,9 @@ class TopicController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(TopicRequest $request, string $id)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'body' => 'required|string',
-        ]);
-
         $topic = Topic::findOrFail($id);
-
-        if (!auth()->check()) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
 
         $topic->update([
             'title' => $request->title,

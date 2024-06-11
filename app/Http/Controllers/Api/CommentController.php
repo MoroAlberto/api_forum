@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CommentRequest;
 use App\Models\Comment;
 use App\Models\Topic;
-use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
@@ -20,17 +20,9 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, string $topicId)
+    public function store(CommentRequest $request, string $topicId)
     {
-        $request->validate([
-            'body' => 'required|string',
-        ]);
-
         $topic = Topic::findOrFail($topicId);
-
-        if (!auth()->check()) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
 
         $comment = new Comment();
         $comment->user_id = $request->user()->id;
@@ -52,17 +44,9 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CommentRequest $request, string $id)
     {
-        $request->validate([
-            'body' => 'required|string',
-        ]);
-
         $comment = Comment::findOrFail($id);
-
-        if (!auth()->check()) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
 
         $comment->update([
             'body' => $request->body,
