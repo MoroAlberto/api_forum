@@ -73,7 +73,7 @@ but the forum is also accessible by those who do not have a login.
 #### No authentication required
 
 ### Update a Topic
-**PUT** - `https://127.0.0.1/api/topics/{id}`
+**PUT** - `https://127.0.0.1/api/topics/{topic_id}`
 
 #### Headers:
 - Authorization: Bearer Token
@@ -87,7 +87,7 @@ but the forum is also accessible by those who do not have a login.
 ```
 
 ### Delete a Topic
-**DELETE** - `https://127.0.0.1/api/topics/{id}`
+**DELETE** - `https://127.0.0.1/api/topics/{topic_id}`
 
 #### Headers:
 - Authorization: Bearer Token
@@ -95,7 +95,7 @@ but the forum is also accessible by those who do not have a login.
 ## Comments
 
 ### Create a New Comment for a Topic
-**POST** - `https://127.0.0.1/api/topics/{id}/comments`
+**POST** - `https://127.0.0.1/api/comments/{topic_id}`
 
 #### Headers:
 - Authorization: Bearer Token
@@ -113,12 +113,12 @@ but the forum is also accessible by those who do not have a login.
 #### No authentication required
 
 ### Show a Single Comment
-**GET** - `https://127.0.0.1/api/comments/{id}`
+**GET** - `https://127.0.0.1/api/comments/{comment_id}`
 
 #### No authentication required
 
 ### Update a Comment
-**PUT** - `https://127.0.0.1/api/comments/{id}`
+**PUT** - `https://127.0.0.1/api/comments/{comment_id}`
 
 #### Headers:
 - Authorization: Bearer Token
@@ -131,7 +131,7 @@ but the forum is also accessible by those who do not have a login.
 ```
 
 ### Delete a Comment
-**DELETE** - `https://127.0.0.1/api/comments/{id}`
+**DELETE** - `https://127.0.0.1/api/comments/{comment_id}`
 
 #### Headers:
 - Authorization: Bearer Token

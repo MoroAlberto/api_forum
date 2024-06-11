@@ -17,9 +17,12 @@ Route::get('/comments/{id}', [CommentController::class, 'show']);
 
 // Private
 Route::middleware('auth:sanctum')->group(function () {
-    Route::resource('topics', TopicController::class)->except(['index', 'show']);
-    Route::resource('comments', CommentController::class)->except(['index', 'show']);
+    Route::post('/topics', [TopicController::class, 'store']);
+    Route::put('/topics/{topic}', [TopicController::class, 'update']);
+    Route::delete('/topics/{topic}', [TopicController::class, 'destroy']);
 
-    Route::post('/topics/{id}/comments', [CommentController::class, 'store']);
+    Route::post('/comments/{topic}', [CommentController::class, 'store']);
+    Route::put('/comments/{comment}', [CommentController::class, 'update']);
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
 });
 

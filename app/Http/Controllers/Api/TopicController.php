@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TopicRequest;
 use App\Models\Topic;
-use Illuminate\Http\Request;
 
 class TopicController extends Controller
 {
@@ -14,7 +13,8 @@ class TopicController extends Controller
      */
     public function index()
     {
-        return Topic::with('user', 'comments')->get();
+        $topics = Topic::with('user', 'comments')->get();
+        return response()->json($topics);
     }
 
     /**
@@ -28,7 +28,12 @@ class TopicController extends Controller
         $topic->body = $request->body;
         $topic->save();
 
-        return response()->json($topic, 201);
+        return response()->json(
+            [
+                'message' => 'Topic created successfully',
+                'topic' => $topic
+            ], 201
+        );
     }
 
     /**
@@ -36,38 +41,43 @@ class TopicController extends Controller
      */
     public function show(string $id)
     {
-        return Topic::with('user', 'comments')->findOrFail($id);
+        $topic = Topic::with('user', 'comments')->findOrFail($id);
+        return response()->json($topic);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(TopicRequest $request, string $id)
+    public function update(TopicRequest $request, Topic $topic)
     {
-        $topic = Topic::findOrFail($id);
-
         $topic->update([
             'title' => $request->title,
             'body' => $request->body,
         ]);
 
-        return response()->json(['message' => 'Topic updated successfully', 'topic' => $topic]);
-
+        return response()->json(
+            [
+                'message' => 'Topic updated successfully',
+                'topic' => $topic
+            ]
+        );
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Topic $topic)
     {
-        $topic = Topic::findOrFail($id);
-
         if (!auth()->check()) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
         $topic->delete();
 
-        return response()->json(['message' => 'Topic deleted successfully']);
+        return response()->json(
+            [
+                'message' => 'Topic deleted successfully'
+            ]
+        );
     }
 }
